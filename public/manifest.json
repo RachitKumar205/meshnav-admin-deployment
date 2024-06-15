@@ -1,0 +1,17 @@
+{
+  "id": "d4791d3b-e12c-48f2-978c-253b2b1932fe",
+  "name": "mesh.nav",
+  "short_name": "mesh.nav",
+  "icons": [
+    {
+      "src": "/images/icon/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait"
+}
