@@ -6,3 +6,8 @@ export interface Waypoint {
     longitude: number;
 }
 
+export interface Edge {
+    id: number;
+    online: boolean;
+    waypoints: Waypoint[];
+}

@@ -69,6 +69,10 @@ export default function Home() {
                     </div>
                 ))}
 
+                <div className={'flex-col flex w-full border items-center hover:cursor-pointer hover:bg-zinc-900 justify-center border-gray-700 rounded-xl p-4 mb-4'}>
+                    <p>+</p>
+                </div>
+
                 <Button className={'mt-4'} onClick={() => {
                     setSheetState(false);
                     setCurrentWaypoint(null)
