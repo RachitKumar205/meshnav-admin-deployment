@@ -29,6 +29,7 @@ export default function RootLayout({
                 <Link href={'/'} className={'hover:underline hover:text-white text-md text-gray-400'}>Waypoints</Link>
                 <Link href={'/network'} className={'hover:underline hover:text-white text-md text-gray-400'}>Network</Link>
                 <Link href={'/create_edge'} className={'hover:underline hover:text-white text-md text-gray-400'}>Add Edges</Link>
+                <Link href={'/map'} className={'hover:underline hover:text-white text-md text-gray-400'}>Map</Link>
             </div>
         </div>
         {children}

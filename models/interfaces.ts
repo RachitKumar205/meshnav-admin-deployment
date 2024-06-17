@@ -1,5 +1,5 @@
 export interface Waypoint {
-    id: number;
+    id: number | null;
     name: string;
     wp_id: string;
     latitude: number;

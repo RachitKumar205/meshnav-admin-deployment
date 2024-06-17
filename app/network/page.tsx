@@ -10,17 +10,31 @@ import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/
 import {Button} from "@/components/ui/button";
 import {getNetworkColumns} from "@/components/table/network_columns";
 
+interface NetworkStatusResponse {
+    total_edges: number,
+    active_edges: number,
+}
+
 export default function Home() {
 
     const [edges, setEdges] = useState<Edge[]>([]);
     const [connections, setConnections] = useState<Waypoint[]>([]);
     const [currentWaypoint, setCurrentWaypoint] = useState<Waypoint | null>(null);
     const [sheetState, setSheetState] = useState(false);
+    const [networkStatusResponse, setNetworkStatusResponse] = useState<NetworkStatusResponse | null>(null);
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/edges/DEL-SNU-NETWORK/')
             .then(response => {
                 setEdges(response.data);
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+
+        axios.get('http://localhost:8000/api/network-status/DEL-SNU-NETWORK/')
+            .then(response => {
+                setNetworkStatusResponse(response.data);
             })
             .catch(error => {
                 console.error('There was an error!', error);
@@ -42,6 +56,7 @@ export default function Home() {
             .catch(error => {
                 console.error('There was an error!', error);
             });
+
 
         }else{
             axios.post('http://localhost:8000/api/set-edge-offline/', {
@@ -72,12 +87,13 @@ export default function Home() {
         }
     }
 
-
     return (
         <main className="flex bg-zinc-950 h-[calc(100vh-64px)] flex-col items-center overflow-hidden">
             <div className={'w-full h-screen flex flex-row'}>
                 <div className={'w-full h-full flex flex-col mt-8 mx-20 space-y-4 mb-8'}>
+                    <div className={'flex flex-row'}>
                     <p className={'text-3xl'}>Network Edges</p>
+                    </div>
                     <DataTable columns={getNetworkColumns(setEdgeStatus)} data={edges}/>
                 </div>
             </div>
