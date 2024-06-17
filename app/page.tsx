@@ -8,6 +8,19 @@ import {DataTable} from "@/components/table/data-table";
 import {getColumns} from "@/components/table/columns";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import {Button} from "@/components/ui/button";
+import {toast} from "@/components/ui/use-toast";
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel,
+    AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
+
+interface DeleteResponse {
+    status: string,
+    message: string
+}
 
 export default function Home() {
 
@@ -15,6 +28,9 @@ export default function Home() {
     const [connections, setConnections] = useState<Waypoint[]>([]);
     const [currentWaypoint, setCurrentWaypoint] = useState<Waypoint | null>(null);
     const [sheetState, setSheetState] = useState(false);
+    const [deleteResponse, setDeleteResponse] = useState<DeleteResponse | null>(null);
+    const [deleteDialog, setDeleteDialog] = useState<boolean>(false);
+    const [deleteWaypointId, setDeleteWaypointId] = useState<string | null>(null);
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/network_waypoints/DEL-SNU-NETWORK/')
@@ -26,6 +42,33 @@ export default function Home() {
             });
     }, []);
 
+    function confirmDeleteWaypoint(wp_id: string) {
+        if(wp_id) {
+            axios.post('http://localhost:8000/api/delete-waypoint/', {
+                wp_id: wp_id,
+            }).then(response => {
+                setDeleteResponse(response.data)
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+        }
+    }
+
+    function deleteWaypoint(wp_id: string){
+        setDeleteWaypointId(wp_id);
+        setDeleteDialog(true);
+    }
+
+    useEffect(() => {
+        if(deleteResponse){
+            if(deleteResponse.status === 'success') {
+                toast({title: deleteResponse.message})
+            }else if(deleteResponse.status === 'error'){
+                toast({title: deleteResponse.message, variant: 'destructive'})
+            }
+        }
+    }, [deleteResponse]);
 
     function changeWaypoint(waypoint: Waypoint | null) {
         setCurrentWaypoint(waypoint);
@@ -48,7 +91,7 @@ export default function Home() {
     <main className="flex bg-zinc-950 h-[calc(100vh-64px)] flex-col items-center overflow-hidden">
       <div className={'w-full h-screen flex flex-row'}>
           <div className={'w-full h-full flex flex-col mt-8 mx-20 space-y-4 mb-8'}>
-            <DataTable columns={getColumns(changeWaypoint)} data={waypoints}/>
+            <DataTable columns={getColumns(changeWaypoint, deleteWaypoint)} data={waypoints}/>
           </div>
       </div>
         <Sheet open={sheetState}>
@@ -79,6 +122,22 @@ export default function Home() {
                 }}>Close</Button>
             </SheetContent>
         </Sheet>
+        <AlertDialog open={deleteDialog}>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure you want to delete this waypoint?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete the waypoint
+                        data from the servers.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel onClick={()=>setDeleteDialog(false)}>Cancel</AlertDialogCancel>
+                    <AlertDialogAction className={'bg-red-600'} onClick={()=>confirmDeleteWaypoint(deleteWaypointId)}>Continue</AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+
     </main>
   );
 }

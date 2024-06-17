@@ -141,7 +141,8 @@ export default function Home() {
                 name: currentWaypoint.name,
                 latitude: currentWaypoint.latitude,
                 longitude: currentWaypoint.longitude,
-                wp_id: currentWaypoint.wp_id
+                wp_id: currentWaypoint.wp_id,
+                network_id: "DEL-SNU-NETWORK"
             })
                 .then(response => {
                     toast({title: "Waypoint created successfully"});
