@@ -36,6 +36,9 @@ export default function Home() {
             axios.post('http://localhost:8000/api/set-edge-online/', {
                 edge_id: edge.id
             })
+                .then(response => {
+                    setEdges(response.data);
+                })
             .catch(error => {
                 console.error('There was an error!', error);
             });
@@ -44,12 +47,14 @@ export default function Home() {
             axios.post('http://localhost:8000/api/set-edge-offline/', {
                 edge_id: edge.id
             })
+                .then(response => {
+                    setEdges(response.data);
+                })
             .catch(error => {
                 console.error('There was an error!', error);
             });
         }
     }
-
 
     function changeWaypoint(waypoint: Waypoint | null) {
         setCurrentWaypoint(waypoint);
