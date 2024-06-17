@@ -16,6 +16,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
+import {apiDomain} from "@/app/apiConfig";
 
 interface DeleteResponse {
     status: string,
@@ -33,7 +34,7 @@ export default function Home() {
     const [deleteWaypointId, setDeleteWaypointId] = useState<string | null>(null);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/network_waypoints/DEL-SNU-NETWORK/')
+        axios.get(`${apiDomain}/api/network_waypoints/DEL-SNU-NETWORK/`)
             .then(response => {
                 setWaypoints(response.data);
             })
@@ -44,7 +45,7 @@ export default function Home() {
 
     function confirmDeleteWaypoint(wp_id: string) {
         if(wp_id) {
-            axios.post('http://localhost:8000/api/delete-waypoint/', {
+            axios.post(`${apiDomain}/api/delete-waypoint/`, {
                 wp_id: wp_id,
             }).then(response => {
                 setDeleteResponse(response.data)
@@ -76,7 +77,7 @@ export default function Home() {
             setSheetState(true);
         }
         if(waypoint) {
-            axios.get(`http://localhost:8000/api/connected_waypoints/${waypoint?.wp_id}/`)
+            axios.get(`${apiDomain}/api/connected_waypoints/${waypoint?.wp_id}/`)
                 .then(response => {
                     setConnections(response.data);
                 })

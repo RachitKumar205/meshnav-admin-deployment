@@ -9,6 +9,7 @@ import {getColumns} from "@/components/table/columns";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import {Button} from "@/components/ui/button";
 import {getNetworkColumns} from "@/components/table/network_columns";
+import {apiDomain} from "@/app/apiConfig";
 
 interface NetworkStatusResponse {
     total_edges: number,
@@ -24,7 +25,7 @@ export default function Home() {
     const [networkStatusResponse, setNetworkStatusResponse] = useState<NetworkStatusResponse | null>(null);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/edges/DEL-SNU-NETWORK/')
+        axios.get(`${apiDomain}/api/edges/DEL-SNU-NETWORK/`)
             .then(response => {
                 setEdges(response.data);
             })
@@ -32,7 +33,7 @@ export default function Home() {
                 console.error('There was an error!', error);
             });
 
-        axios.get('http://localhost:8000/api/network-status/DEL-SNU-NETWORK/')
+        axios.get(`${apiDomain}/api/network-status/DEL-SNU-NETWORK/`)
             .then(response => {
                 setNetworkStatusResponse(response.data);
             })
@@ -47,7 +48,7 @@ export default function Home() {
 
     function setEdgeStatus(edge: Edge, status:boolean) {
         if(status){
-            axios.post('http://localhost:8000/api/set-edge-online/', {
+            axios.post(`${apiDomain}/api/set-edge-online/`, {
                 edge_id: edge.id
             })
                 .then(response => {
@@ -59,7 +60,7 @@ export default function Home() {
 
 
         }else{
-            axios.post('http://localhost:8000/api/set-edge-offline/', {
+            axios.post(`${apiDomain}/api/set-edge-offline/`, {
                 edge_id: edge.id
             })
                 .then(response => {
@@ -77,7 +78,7 @@ export default function Home() {
             setSheetState(true);
         }
         if(waypoint) {
-            axios.get(`http://localhost:8000/api/edges/DEL-SNU-NETWORK/`)
+            axios.get(`${apiDomain}/api/edges/DEL-SNU-NETWORK/`)
                 .then(response => {
                     setConnections(response.data);
                 })

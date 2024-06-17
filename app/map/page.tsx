@@ -23,6 +23,7 @@ import {Checkbox} from "@/components/ui/checkbox";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {toast} from "@/components/ui/use-toast";
+import {apiDomain} from "@/app/apiConfig";
 
 ChartJS.register(
     CategoryScale,
@@ -85,7 +86,7 @@ export default function Home() {
     }, [edges]);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/edges/DEL-SNU-NETWORK/')
+        axios.get(`${apiDomain}/api/edges/DEL-SNU-NETWORK/`)
             .then(response => {
                 setEdges(response.data);
             })
@@ -98,7 +99,7 @@ export default function Home() {
     const fetchData = async () => {
         setIsLoading(true);
         try {
-            const response = await axios.get(`http://localhost:8000/nav/`); // Replace with your actual endpoint URL
+            const response = await axios.get(`${apiDomain}/nav/`); // Replace with your actual endpoint URL
             setData(response.data);
         } catch (error) {
             setError(error as any);
@@ -137,7 +138,7 @@ export default function Home() {
                 toast({variant: "destructive", title: "Please enter a valid waypoint name"})
                 return;
             }
-            axios.post('http://localhost:8000/nav/', {
+            axios.post(`${apiDomain}/nav/`, {
                 name: currentWaypoint.name,
                 latitude: currentWaypoint.latitude,
                 longitude: currentWaypoint.longitude,

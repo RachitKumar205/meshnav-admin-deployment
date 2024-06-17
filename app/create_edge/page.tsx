@@ -8,6 +8,7 @@ import {Input} from "@/components/ui/input";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {toast} from "@/components/ui/use-toast";
+import {apiDomain} from "@/app/apiConfig";
 
 interface EdgeResponse {
     status: string,
@@ -22,7 +23,7 @@ export default function Home() {
 
     function addEdge() {
         if(firstWaypoint && secondWaypoint) {
-            axios.post('http://localhost:8000/api/edges/', {
+            axios.post(`${apiDomain}/api/edges/`, {
                 start_wp: firstWaypoint,
                 end_wp: secondWaypoint,
                 network_id: "DEL-SNU-NETWORK"
